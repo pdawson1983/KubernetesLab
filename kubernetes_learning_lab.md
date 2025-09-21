@@ -3,11 +3,222 @@
 ## Overview
 This hands-on lab teaches Kubernetes fundamentals through practical exercises using a WebSphere Liberty application. The curriculum progresses from basic concepts to advanced patterns needed for Azure Kubernetes Service (AKS) operations.
 
-## Prerequisites
-- Minikube cluster running
-- kubectl installed and configured
-- Docker available in Minikube environment
-- WebSphere Liberty application built
+## Prerequisites and Environment Setup
+
+### System Requirements
+- **Operating System**: Linux, macOS, or Windows with WSL2
+- **Memory**: Minimum 8GB RAM (16GB recommended)
+- **CPU**: 2+ cores
+- **Disk**: 20GB free space
+- **Network**: Internet connection for downloading components
+
+### Required Software Installation
+
+#### 1. Install Docker
+**Ubuntu/WSL2:**
+```bash
+# Update package index
+sudo apt update
+
+# Install Docker
+sudo apt install docker.io
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Logout and login again, then test
+docker --version
+```
+
+**macOS:**
+```bash
+# Install Docker Desktop from https://www.docker.com/products/docker-desktop
+# Or using Homebrew:
+brew install --cask docker
+```
+
+**Windows:**
+- Install Docker Desktop for Windows with WSL2 backend
+- Enable WSL2 integration in Docker Desktop settings
+
+#### 2. Install kubectl
+**Linux:**
+```bash
+# Download kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+# Make executable and move to PATH
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Verify installation
+kubectl version --client
+```
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install kubectl
+
+# Or download directly
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+```
+
+**Windows (WSL2):**
+```bash
+# Same as Linux commands above, run in WSL2 terminal
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+```
+
+#### 3. Install Minikube
+**Linux:**
+```bash
+# Download Minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+# Install Minikube
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Verify installation
+minikube version
+```
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install minikube
+
+# Or download directly
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+```
+
+**Windows (WSL2):**
+```bash
+# Download and install in WSL2
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+#### 4. Install Java 11 and Maven
+**Ubuntu/WSL2:**
+```bash
+# Install Java 11
+sudo apt update
+sudo apt install openjdk-11-jdk
+
+# Install Maven
+sudo apt install maven
+
+# Verify installations
+java -version
+mvn -version
+```
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install openjdk@11
+brew install maven
+
+# Set JAVA_HOME
+echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 11)' >> ~/.zshrc
+source ~/.zshrc
+```
+
+#### 5. Install Helm
+**Linux/WSL2:**
+```bash
+# Download and install Helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Verify installation
+helm version
+```
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install helm
+```
+
+#### 6. Install dos2unix (for WSL2/Linux)
+```bash
+# Install dos2unix for file conversion
+sudo apt install dos2unix
+```
+
+### Environment Configuration
+
+#### Fix WSL2 Line Endings (Windows Users)
+If using WSL2, configure Git and your editor to use Unix line endings:
+```bash
+# Configure Git for Unix line endings
+git config --global core.autocrlf input
+git config --global core.eol lf
+
+# Convert existing files
+find . -type f \( -name "*.sh" -o -name "*.java" -o -name "*.xml" -o -name "*.properties" -o -name "*.yml" -o -name "*.yaml" \) -exec dos2unix {} \;
+```
+
+#### VSCode Configuration (Optional but Recommended)
+If using VSCode with WSL2, add these settings to your VSCode settings.json:
+```json
+{
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+    "terminal.integrated.shellArgs.linux": ["-i"],
+    "terminal.integrated.env.linux": {
+        "TERM": "xterm-256color"
+    },
+    "files.eol": "\n"
+}
+```
+
+### Start Minikube Cluster
+```bash
+# Start Minikube with Docker driver
+minikube start --driver=docker --memory=4096 --cpus=2
+
+# Enable necessary addons
+minikube addons enable ingress
+minikube addons enable metrics-server
+
+# Verify cluster is running
+kubectl cluster-info
+kubectl get nodes
+```
+
+### Configure Docker Environment for Minikube
+```bash
+# Configure shell to use Minikube's Docker daemon
+eval $(minikube docker-env)
+
+# Verify Docker is pointing to Minikube
+docker ps
+```
+
+### Verify Installation
+Run these commands to ensure everything is working:
+```bash
+# Check all components
+minikube status
+kubectl version --client
+docker --version
+java -version
+mvn -version
+helm version
+
+# Test cluster connectivity
+kubectl get pods --all-namespaces
+```
 
 ## Lab Environment Setup
 
