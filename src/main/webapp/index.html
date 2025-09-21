@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liberty Simple Test App</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 25px;
+            background: #007acc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .button:hover {
+            background: #005a9e;
+        }
+        .status {
+            background: #27ae60;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 WebSphere Liberty Test Application</h1>
+        <div class="status">RUNNING</div>
+        
+        <p>Welcome to your simple Liberty test application!</p>
+        
+        <div>
+            <a href="/hello" class="button">Test Servlet</a>
+            <a href="/hello?name=Liberty" class="button">Test with Parameter</a>
+        </div>
+        
+        <hr>
+        <h3>Application Info:</h3>
+        <p><strong>Context Path:</strong> /</p>
+        <p><strong>Server:</strong> WebSphere Liberty</p>
+        <p><strong>Status:</strong> ✅ Working</p>
+    </div>
+</body>
+</html>

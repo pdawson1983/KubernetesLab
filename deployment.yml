@@ -1,0 +1,23 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: liberty-deployment
+ labels:
+   app: liberty
+spec:
+ replicas: 3
+ selector:
+   matchLabels:
+     app: liberty
+ template:
+   metadata:
+     labels:
+       app: liberty
+   spec:
+     containers:
+     - name: liberty-container
+       image: liberty-simple:v1
+       ports:
+       - containerPort: 9080
+       imagePullPolicy: Never

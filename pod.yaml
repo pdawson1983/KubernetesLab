@@ -1,0 +1,15 @@
+# pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+ name: liberty-pod
+ labels:
+  app: liberty
+  test-label: test
+spec:
+ containers:
+ - name: liberty-container
+   image: liberty-simple:v1
+   ports:
+   - containerPort: 9080
+   imagePullPolicy: Never
